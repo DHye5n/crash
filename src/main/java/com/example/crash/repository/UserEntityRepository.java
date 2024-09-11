@@ -1,4 +1,4 @@
-package com.example.crash;
+package com.example.crash.repository;
 
 import com.example.crash.model.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

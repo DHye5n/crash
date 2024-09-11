@@ -1,6 +1,6 @@
 package com.example.crash.service;
 
-import com.example.crash.UserEntityRepository;
+import com.example.crash.repository.UserEntityRepository;
 import com.example.crash.exception.user.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
