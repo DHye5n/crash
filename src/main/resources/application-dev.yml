@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8088
 
 spring:
   jpa:
@@ -22,4 +22,4 @@ spring:
 
 
 jwt:
-  secret-ket: X2NyYXNoX3NlcnZpY2Vfc3VwZXJfc2VjcmV0X2tldF8=
+  secret-key: X2NyYXNoX3NlcnZpY2Vfc3VwZXJfc2VjcmV0X2tldF8=
