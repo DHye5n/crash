@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class ClientErrorResponse {
+public class ErrorResponse {
 
     private HttpStatus status;
     private String message;
