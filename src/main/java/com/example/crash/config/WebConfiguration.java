@@ -1,5 +1,6 @@
 package com.example.crash.config;
 
+import com.example.crash.model.user.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +27,7 @@ public class WebConfiguration {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://127.0.0.1:3000"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PATCH", "DELETE"));
         configuration.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/v1/**", configuration);
@@ -40,6 +41,10 @@ public class WebConfiguration {
                 .authorizeHttpRequests((requests) -> requests
                         .antMatchers(HttpMethod.POST, "/api/*/users", "/api/*/users/authenticate")
                         .permitAll()
+                        .antMatchers(HttpMethod.GET, "/api/*/session-speakers", "/api/*/users/session-speakers/**")
+                        .permitAll()
+                        .antMatchers("/api/*/session-speakers", "/api/*/session-speakers/**")
+                        .hasRole(Role.ADMIN.name())
                         .anyRequest()
                         .authenticated())
 
