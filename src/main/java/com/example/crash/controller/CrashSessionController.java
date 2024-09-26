@@ -4,9 +4,13 @@ package com.example.crash.controller;
 import com.example.crash.model.crashsession.CrashSession;
 import com.example.crash.model.crashsession.CrashSessionPatchRequestBody;
 import com.example.crash.model.crashsession.CrashSessionPostRequestBody;
+import com.example.crash.model.crashsession.CrashSessionRegistrationStatus;
+import com.example.crash.model.entity.UserEntity;
 import com.example.crash.service.CrashSessionService;
+import com.example.crash.service.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,6 +23,7 @@ import java.util.List;
 public class CrashSessionController {
 
     private final CrashSessionService crashSessionService;
+    private final RegistrationService registrationService;
 
     @GetMapping
     public ResponseEntity<List<CrashSession>> getCrashSessions() {
@@ -31,6 +36,17 @@ public class CrashSessionController {
         CrashSession crashSession = crashSessionService.getCrashSession(sessionId);
         return ResponseEntity.ok(crashSession);
     }
+
+    @GetMapping("/{sessionId}/registration-status")
+    public ResponseEntity<CrashSessionRegistrationStatus> getCrashSessionRegistrationStatusBySessionId(
+            @PathVariable Long sessionId, Authentication authentication) {
+
+        CrashSessionRegistrationStatus registrationStatus =
+                registrationService.getCrashSessionRegistrationStatusBySessionIdAndCurrentUser
+                                (sessionId, (UserEntity) authentication.getPrincipal());
+        return ResponseEntity.ok(registrationStatus);
+    }
+
 
     @PostMapping
     public ResponseEntity<CrashSession> createCrashSession(

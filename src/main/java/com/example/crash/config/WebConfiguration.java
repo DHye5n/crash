@@ -41,9 +41,17 @@ public class WebConfiguration {
                 .authorizeHttpRequests((requests) -> requests
                         .antMatchers(HttpMethod.POST, "/api/*/users", "/api/*/users/authenticate")
                         .permitAll()
-                        .antMatchers(HttpMethod.GET, "/api/*/session-speakers", "/api/*/session-speakers/**")
+                        .antMatchers(HttpMethod.GET,
+                                "/api/*/session-speakers",
+                                "/api/*/session-speakers/**",
+                                "/api/*/crash-sessions",
+                                "/api/*/crash-sessions/**")
                         .permitAll()
-                        .antMatchers("/api/*/session-speakers", "/api/*/session-speakers/**")
+                        .antMatchers(
+                                "/api/*/session-speakers",
+                                "/api/*/session-speakers/**",
+                                "/api/*/crash-sessions",
+                                "/api/*/crash-sessions/**")
                         .hasRole(Role.ADMIN.name())
                         .anyRequest()
                         .authenticated())
