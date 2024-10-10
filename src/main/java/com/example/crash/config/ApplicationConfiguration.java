@@ -30,6 +30,7 @@ public class ApplicationConfiguration {
     private final UserService userService;
     private final SessionSpeakerService sessionSpeakerService;
     private final CrashSessionService crashSessionService;
+//    private final SlackService slackService;
 
     @Bean
     public ApplicationRunner applicationRunner() {
@@ -38,6 +39,7 @@ public class ApplicationConfiguration {
             public void run(ApplicationArguments args) throws Exception {
                 createTestUsers();
                 createTestSessionSpeakers(10);
+//                slackService.sendSlackNotification();
             }
         };
     }

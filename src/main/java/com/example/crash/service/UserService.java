@@ -1,13 +1,14 @@
 package com.example.crash.service;
 
 import com.example.crash.exception.user.UserAlreadyExistsException;
+import com.example.crash.exception.user.UserNotFoundException;
 import com.example.crash.model.entity.UserEntity;
 import com.example.crash.model.user.User;
 import com.example.crash.model.user.UserAuthenticationResponse;
 import com.example.crash.model.user.UserLoginRequestBody;
 import com.example.crash.model.user.UserSignUpRequestBody;
+import com.example.crash.repository.UserEntityCacheRepository;
 import com.example.crash.repository.UserEntityRepository;
-import com.example.crash.exception.user.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,6 +24,7 @@ public class UserService implements UserDetailsService {
     private final UserEntityRepository userEntityRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final UserEntityCacheRepository userEntityCacheRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -47,6 +49,7 @@ public class UserService implements UserDetailsService {
 
     public UserAuthenticationResponse login(UserLoginRequestBody userLoginRequestBody) {
         UserEntity userEntity = getUserEntityByUsername(userLoginRequestBody.getUsername());
+        System.out.println("Retrieved UserEntity: " + userEntity);
 
         if (passwordEncoder.matches(userLoginRequestBody.getPassword(), userEntity.getPassword())) {
             String accessToken = jwtService.generateAccessToken(userEntity);
@@ -57,7 +60,18 @@ public class UserService implements UserDetailsService {
     }
 
     public UserEntity getUserEntityByUsername(String username) {
-        return userEntityRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException(username));
+
+        return userEntityCacheRepository
+                .getUserEntityCache(username)
+                .orElseGet(() -> {
+                    UserEntity userEntity =
+                            userEntityRepository
+                            .findByUsername(username)
+                            .orElseThrow(() -> new UserNotFoundException(username));
+
+                    userEntityCacheRepository.setUserEntityCache(userEntity);
+
+                    return userEntity;
+                });
     }
 }

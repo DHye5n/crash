@@ -1,5 +1,5 @@
 server:
-  port: 8088
+  port: 8080
 
 spring:
   jpa:
@@ -19,6 +19,11 @@ spring:
     url: jdbc:postgresql://localhost:15432/crash-db
     username: crash-master
     password: crash-postgres-password
+
+  redis:
+    host: localhost
+    port: 6379
+
 
 
 jwt:
